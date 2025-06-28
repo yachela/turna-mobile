@@ -44,7 +44,7 @@ public class AgregarTurnoActivity extends AppCompatActivity {
             }
 
             int day = datePicker.getDayOfMonth();
-            int month = datePicker.getMonth() + 1; // enero = 0
+            int month = datePicker.getMonth() + 1;
             int year = datePicker.getYear();
             String fecha = String.format("%02d/%02d/%04d", day, month, year);
 
