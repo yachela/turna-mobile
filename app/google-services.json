@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "701704206415",
+    "project_id": "turna-aa810",
+    "storage_bucket": "turna-aa810.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:701704206415:android:e76e1cde885a6da96b923a",
+        "android_client_info": {
+          "package_name": "com.example.turna"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-1Yiem1KBaouxsGl-3uWgQTaCb53ANl8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
