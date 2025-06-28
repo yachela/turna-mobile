@@ -22,6 +22,7 @@ public class ListaTurnosActivity extends AppCompatActivity {
     private ListView listViewTurnos;
     private AppDatabase db;
     private ArrayList<Turno> turnos = new ArrayList<>();
+    private Executor executor = Executors.newSingleThreadExecutor();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,21 +47,10 @@ public class ListaTurnosActivity extends AppCompatActivity {
         db = AppDatabase.getInstance(this);
         listViewTurnos = findViewById(R.id.listViewTurnos);
 
-
-        /*
-        Button btnLogout = findViewById(R.id.btnLogout);
-        btnLogout.setOnClickListener(v -> {
-            getSharedPreferences("TurnaPrefs", MODE_PRIVATE).edit().clear().apply();
-            Intent intent = new Intent(this, LoginActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-            finish();
-        });
-        */
-
         cargarTurnos();
 
         listViewTurnos.setOnItemClickListener((parent, view, position, id) -> {
+            if (position >= turnos.size()) return;
             Turno turnoSeleccionado = turnos.get(position);
 
             Intent intent = new Intent(ListaTurnosActivity.this, EditarTurnoActivity.class);
@@ -74,14 +64,17 @@ public class ListaTurnosActivity extends AppCompatActivity {
         });
 
         listViewTurnos.setOnItemLongClickListener((parent, view, position, id) -> {
+            if (position >= turnos.size()) return true;
             Turno turnoSeleccionado = turnos.get(position);
 
             new AlertDialog.Builder(ListaTurnosActivity.this)
                     .setTitle("Eliminar turno")
                     .setMessage("¿Querés eliminar este turno?")
                     .setPositiveButton("Sí", (dialog, which) -> {
-                        db.turnoDao().delete(turnoSeleccionado);
-                        cargarTurnos();
+                        executor.execute(() -> {
+                            db.turnoDao().delete(turnoSeleccionado);
+                            runOnUiThread(this::cargarTurnos);
+                        });
                     })
                     .setNegativeButton("Cancelar", null)
                     .show();
@@ -96,7 +89,6 @@ public class ListaTurnosActivity extends AppCompatActivity {
     }
 
     private void cargarTurnos() {
-        Executor executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {
             ArrayList<Turno> turnosDb = new ArrayList<>(db.turnoDao().getAll());
             ArrayList<String> lista = new ArrayList<>();
@@ -114,7 +106,7 @@ public class ListaTurnosActivity extends AppCompatActivity {
                     vacio.add("No hay turnos");
                     adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, vacio);
                     listViewTurnos.setAdapter(adapter);
-                    listViewTurnos.setOnItemClickListener(null); // Desactiva eventos
+                    listViewTurnos.setOnItemClickListener(null);
                     listViewTurnos.setOnItemLongClickListener(null);
                 } else {
                     adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, lista);
