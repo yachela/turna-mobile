@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,8 +30,13 @@ public class RegistroActivity extends AppCompatActivity {
         editTextEmailRegistro = findViewById(R.id.editTextEmailRegistro);
         editTextPasswordRegistro = findViewById(R.id.editTextPasswordRegistro);
         btnRegistrar = findViewById(R.id.btnRegistrar);
-
+        TextView linkIniciarSesion = findViewById(R.id.linkIniciarSesion);
         usuarioDao = AppDatabase.getInstance(this).usuarioDao();
+
+        linkIniciarSesion.setOnClickListener(v -> {
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+        });
 
         btnRegistrar.setOnClickListener(v -> {
             String email = editTextEmailRegistro.getText().toString().trim();
