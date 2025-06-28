@@ -1,58 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:padding="24dp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/fondoClaro">
 
-    <Spinner
-        android:id="@+id/spinnerProfesional"
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="24dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"/>
+        android:gravity="center_horizontal">
 
-    <Button
-        android:id="@+id/btnFecha"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:text="Seleccionar fecha" />
+        <ImageView
+            android:id="@+id/imageViewLogo"
+            android:src="@drawable/turna"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:contentDescription="@string/logo_turna"
+            android:layout_gravity="center"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"/>
 
-    <TextView
-        android:id="@+id/editTextFecha"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Fecha no seleccionada"
-        android:layout_marginBottom="16dp" />
+        <TextView
+            android:id="@+id/textViewReservarTurno"
+            android:text="Reservar Turno"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp" />
 
-    <Button
-        android:id="@+id/btnHora"
-        android:text="Seleccionar hora"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp" />
+        <Spinner
+            android:id="@+id/spinnerProfesional"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="18dp" />
 
-    <TextView
-        android:id="@+id/editTextHora"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Hora no seleccionada"
-        android:layout_marginBottom="16dp" />
+        <Button
+            android:id="@+id/btnFecha"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:backgroundTint="@color/turna_primary"
+            android:textColor="@android:color/white"
+            android:layout_marginBottom="10dp"
+            android:text="Seleccionar fecha" />
 
-    <Button
-        android:id="@+id/btnGuardarTurno"
-        android:text="Guardar turno"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"/>
+        <EditText
+            android:id="@+id/editTextFecha"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Fecha no seleccionada"
+            android:focusable="false"
+            android:background="@drawable/rounded_edittext"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp" />
 
-    <Button
-        android:id="@+id/btnEliminarTurno"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Eliminar turno"
-        android:backgroundTint="@android:color/holo_red_light"
-        android:textColor="@android:color/white"
-        android:visibility="gone" />
-</LinearLayout>
+        <Button
+            android:id="@+id/btnHora"
+            android:text="Seleccionar hora"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:backgroundTint="@color/turna_primary"
+            android:textColor="@android:color/white"
+            android:layout_marginBottom="10dp" />
+
+        <EditText
+            android:id="@+id/editTextHora"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Hora no seleccionada"
+            android:focusable="false"
+            android:background="@drawable/rounded_edittext"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp"
+            />
+
+
+        <Button
+            android:id="@+id/btnGuardarTurno"
+            android:text="Guardar turno"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:backgroundTint="@color/turna_accent"
+            android:textColor="@android:color/white"
+            android:textAllCaps="false"
+            android:layout_marginTop="20dp"/>
+
+        <Button
+            android:id="@+id/btnEliminarTurno"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Eliminar turno"
+            android:backgroundTint="@android:color/holo_red_light"
+            android:textColor="@android:color/white"
+            android:visibility="gone"
+            android:layout_marginTop="14dp"/>
+    </LinearLayout>
+</ScrollView>
