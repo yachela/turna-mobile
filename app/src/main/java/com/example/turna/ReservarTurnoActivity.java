@@ -3,9 +3,7 @@ package com.example.turna;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import com.google.firebase.auth.FirebaseAuth;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,13 +12,13 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.turna.database.TurnoDbHelper;
+import com.example.turna.database.AppDatabase;
+import com.example.turna.database.TurnoDao;
 import com.example.turna.model.Turno;
 
-import android.content.ContentValues;
-import android.database.sqlite.SQLiteDatabase;
-
 import java.util.Calendar;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class ReservarTurnoActivity extends AppCompatActivity {
 
@@ -29,16 +27,12 @@ public class ReservarTurnoActivity extends AppCompatActivity {
     private Button btnGuardar;
     private int turnoId;
     private Button btnEliminar;
+    private TurnoDao turnoDao;
+    private Executor executor = Executors.newSingleThreadExecutor();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        if (auth.getCurrentUser() == null) {
-            startActivity(new Intent(this, LoginActivity.class));
-            finish();
-            return;
-        }
         setContentView(R.layout.activity_reservar_turno);
 
         spinnerProfesional = findViewById(R.id.spinnerProfesional);
@@ -49,59 +43,37 @@ public class ReservarTurnoActivity extends AppCompatActivity {
         editTextHora = findViewById(R.id.editTextHora);
         btnEliminar = findViewById(R.id.btnEliminarTurno);
 
+        turnoDao = AppDatabase.getInstance(this).turnoDao();
+
         final Calendar calendario = Calendar.getInstance();
 
-        // Setup spinner
         String[] profesionales = {"Dra. López", "Lic. García", "Dr. Pérez"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_dropdown_item, profesionales);
         spinnerProfesional.setAdapter(adapter);
 
-        // Leer datos si es edición
         Intent intent = getIntent();
         turnoId = intent.getIntExtra("turnoId", -1);
+
         if (turnoId != -1) {
-            TurnoDbHelper dbHelper = new TurnoDbHelper(this);
-            SQLiteDatabase db = dbHelper.getReadableDatabase();
-
-            String[] projection = {
-                    TurnoDbHelper.COLUMN_PROFESIONAL,
-                    TurnoDbHelper.COLUMN_FECHA,
-                    TurnoDbHelper.COLUMN_HORA
-            };
-
-            String selection = TurnoDbHelper.COLUMN_ID + " = ?";
-            String[] selectionArgs = {String.valueOf(turnoId)};
-
-            try (android.database.Cursor cursor = db.query(
-                    TurnoDbHelper.TABLE_TURNOS,
-                    projection,
-                    selection,
-                    selectionArgs,
-                    null,
-                    null,
-                    null
-            )) {
-                if (cursor.moveToFirst()) {
-                    String profesional = cursor.getString(cursor.getColumnIndexOrThrow(TurnoDbHelper.COLUMN_PROFESIONAL));
-                    String fecha = cursor.getString(cursor.getColumnIndexOrThrow(TurnoDbHelper.COLUMN_FECHA));
-                    String hora = cursor.getString(cursor.getColumnIndexOrThrow(TurnoDbHelper.COLUMN_HORA));
-
-                    int spinnerPosition = adapter.getPosition(profesional);
-                    spinnerProfesional.setSelection(spinnerPosition);
-                    editTextFecha.setText(fecha);
-                    editTextHora.setText(hora);
-                    btnFecha.setText(fecha);
-                    btnHora.setText(hora);
+            executor.execute(() -> {
+                Turno turno = turnoDao.buscarPorId(turnoId);
+                if (turno != null) {
+                    runOnUiThread(() -> {
+                        int spinnerPosition = adapter.getPosition(turno.getNombreProfesional());
+                        spinnerProfesional.setSelection(spinnerPosition);
+                        editTextFecha.setText(turno.getFecha());
+                        editTextHora.setText(turno.getHora());
+                        btnFecha.setText(turno.getFecha());
+                        btnHora.setText(turno.getHora());
+                        btnEliminar.setVisibility(Button.VISIBLE);
+                    });
                 }
-            }
-            db.close();
-            btnEliminar.setVisibility(View.VISIBLE);
+            });
         } else {
-            btnEliminar.setVisibility(View.GONE);
+            btnEliminar.setVisibility(Button.GONE);
         }
 
-        // Configuración de botones
         btnFecha.setOnClickListener(v -> {
             int año = calendario.get(Calendar.YEAR);
             int mes = calendario.get(Calendar.MONTH);
@@ -135,7 +107,6 @@ public class ReservarTurnoActivity extends AppCompatActivity {
             timePickerDialog.show();
         });
 
-        // Guardado de turno
         btnGuardar.setOnClickListener(view -> {
             String profesional = spinnerProfesional.getSelectedItem().toString();
             String fecha = editTextFecha.getText().toString().trim();
@@ -146,55 +117,43 @@ public class ReservarTurnoActivity extends AppCompatActivity {
                 return;
             }
 
-            TurnoDbHelper dbHelper = new TurnoDbHelper(this);
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-            ContentValues values = new ContentValues();
-            values.put(TurnoDbHelper.COLUMN_PROFESIONAL, profesional);
-            values.put(TurnoDbHelper.COLUMN_FECHA, fecha);
-            values.put(TurnoDbHelper.COLUMN_HORA, hora);
-
-            long result;
-            if (turnoId == -1) {
-                result = db.insert(TurnoDbHelper.TABLE_TURNOS, null, values);
-            } else {
-                String selection = TurnoDbHelper.COLUMN_ID + " = ?";
-                String[] selectionArgs = {String.valueOf(turnoId)};
-                result = db.update(TurnoDbHelper.TABLE_TURNOS, values, selection, selectionArgs);
-            }
-
-            if (result != -1) {
-                Toast.makeText(this, "Turno guardado", Toast.LENGTH_SHORT).show();
-                finish();
-            } else {
-                Toast.makeText(this, "Error al guardar el turno", Toast.LENGTH_SHORT).show();
-            }
-
-            db.close();
+            executor.execute(() -> {
+                if (turnoId == -1) {
+                    Turno nuevoTurno = new Turno("Paciente", "Motivo", fecha, hora, profesional); // Ajusta si quieres guardar nombre y motivo real
+                    turnoDao.insert(nuevoTurno);
+                } else {
+                    Turno turnoEditado = turnoDao.buscarPorId(turnoId);
+                    if (turnoEditado != null) {
+                        turnoEditado.setNombreProfesional(profesional);
+                        turnoEditado.setFecha(fecha);
+                        turnoEditado.setHora(hora);
+                        turnoDao.actualizar(turnoEditado);
+                    }
+                }
+                runOnUiThread(() -> {
+                    Toast.makeText(this, "Turno guardado", Toast.LENGTH_SHORT).show();
+                    finish();
+                });
+            });
         });
 
-        // Eliminación de turno
         btnEliminar.setOnClickListener(view -> {
             if (turnoId == -1) {
                 Toast.makeText(this, "No hay turno seleccionado", Toast.LENGTH_SHORT).show();
                 return;
             }
-            TurnoDbHelper dbHelper = new TurnoDbHelper(this);
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-            String selection = TurnoDbHelper.COLUMN_ID + " = ?";
-            String[] selectionArgs = {String.valueOf(turnoId)};
-
-            int filasEliminadas = db.delete(TurnoDbHelper.TABLE_TURNOS, selection, selectionArgs);
-
-            db.close();
-
-            if (filasEliminadas > 0) {
-                Toast.makeText(this, "Turno eliminado", Toast.LENGTH_SHORT).show();
-                finish();
-            } else {
-                Toast.makeText(this, "Error al eliminar", Toast.LENGTH_SHORT).show();
-            }
+            executor.execute(() -> {
+                Turno turnoAEliminar = turnoDao.buscarPorId(turnoId);
+                if (turnoAEliminar != null) {
+                    turnoDao.delete(turnoAEliminar);
+                    runOnUiThread(() -> {
+                        Toast.makeText(this, "Turno eliminado", Toast.LENGTH_SHORT).show();
+                        finish();
+                    });
+                } else {
+                    runOnUiThread(() -> Toast.makeText(this, "Error al eliminar", Toast.LENGTH_SHORT).show());
+                }
+            });
         });
 
     }
