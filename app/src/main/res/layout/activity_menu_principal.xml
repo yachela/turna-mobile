@@ -1,33 +1,78 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/menuPrincipal"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="24dp"
-    android:gravity="center">
+    android:background="@color/fondoClaro"
+    android:fillViewport="true">
 
-    <Button
-        android:id="@+id/btnReservar"
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="32dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Reservar Turno" />
+        android:gravity="center_horizontal">
 
-    <Button
-        android:id="@+id/btnVerTurnos"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Ver Turnos" />
+        <ImageView
+            android:id="@+id/imageViewLogo"
+            android:src="@drawable/turna"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="32dp"
+            android:contentDescription="@string/logo_turna"
+            android:elevation="2dp"/>
 
-    <Button
-        android:id="@+id/btnEditarPerfil"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Editar Perfil" />
+        <TextView
+            android:id="@+id/textViewReservarTurno"
+            android:text="¡Bienvenido/a!"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:textColor="@color/turna_dark"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="28dp" />
 
-    <Button
-        android:id="@+id/btnCerrarSesion"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Cerrar Sesión" />
-</LinearLayout>
+        <Button
+            android:id="@+id/btnReservar"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Reservar Turno"
+            android:backgroundTint="@color/turna_primary"
+            android:textColor="@android:color/white"
+            android:textAllCaps="false"
+            android:layout_marginBottom="16dp" />
+
+        <Button
+            android:id="@+id/btnVerTurnos"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Ver Turnos"
+            android:background="@drawable/rounded_button_border"
+            android:textColor="@color/turna_primary"
+            android:textAllCaps="false"
+            android:layout_marginBottom="14dp" />
+
+        <Button
+            android:id="@+id/btnEditarPerfil"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Editar Perfil"
+            android:background="@drawable/rounded_button_border"
+            android:textColor="@color/turna_dark"
+            android:textAllCaps="false"
+            android:layout_marginBottom="20dp" />
+
+        <Button
+            android:id="@+id/btnCerrarSesion"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Cerrar Sesión"
+            android:background="@drawable/rounded_button_red"
+            android:textColor="@android:color/holo_red_dark"
+            android:textAllCaps="false"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="12dp" />
+
+    </LinearLayout>
+</ScrollView>
