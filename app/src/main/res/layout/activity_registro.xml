@@ -1,27 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:padding="24dp"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fillViewport="true">
 
-    <EditText
-        android:id="@+id/editTextEmailRegistro"
-        android:hint="Email"
-        android:inputType="textEmailAddress"
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="24dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
 
-    <EditText
-        android:id="@+id/editTextPasswordRegistro"
-        android:hint="Contraseña"
-        android:inputType="textPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <ImageView
+            android:id="@+id/imageViewLogo"
+            android:src="@drawable/turna"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center"
+            android:contentDescription="@string/logo_turna"
+            android:layout_marginTop="48dp"
+            android:layout_marginBottom="32dp"/>
 
-    <Button
-        android:id="@+id/btnRegistrar"
-        android:text="Registrarse"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-</LinearLayout>
+        <TextView
+            android:id="@+id/textViewRegistro"
+            android:text="Registrarse"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp" />
+
+        <EditText
+            android:id="@+id/editTextEmailRegistro"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/rounded_edittext"
+            android:padding="12dp"
+            android:layout_marginBottom="18dp"/>
+
+        <EditText
+            android:id="@+id/editTextPasswordRegistro"
+            android:hint="Contraseña"
+            android:inputType="textPassword"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/rounded_edittext"
+            android:padding="12dp"
+            android:layout_marginBottom="28dp"/>
+
+        <Button
+            android:id="@+id/btnRegistrar"
+            android:text="Registrarse"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:backgroundTint="@color/turna_primary"
+            android:textColor="@android:color/white"
+            android:textAllCaps="false"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:id="@+id/linkIniciarSesion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="¿Ya tenés cuenta? Iniciá sesión"
+            android:textColor="@color/turna_primary"
+            android:textStyle="bold"
+            android:paddingTop="12dp"/>
+    </LinearLayout>
+</ScrollView>
