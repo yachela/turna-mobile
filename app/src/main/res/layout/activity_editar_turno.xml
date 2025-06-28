@@ -1,58 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EditarTurnoActivity">
+    android:fillViewport="true">
 
-
-
-    <Spinner
-        android:id="@+id/spinnerProfesional"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:padding="8dp" />
+        android:gravity="center_horizontal">
 
-    <EditText
-        android:id="@+id/editTextFecha"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Fecha"
-        android:focusable="false"
-        android:clickable="true"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/spinnerProfesional"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:padding="8dp" />
+        <ImageView
+            android:id="@+id/imageViewLogo"
+            android:src="@drawable/turna"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center"
+            android:contentDescription="@string/logo_turna"
+            android:layout_marginTop="48dp"
+            android:layout_marginBottom="32dp"/>
 
-    <EditText
-        android:id="@+id/editTextHora"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Hora"
-        android:focusable="false"
-        android:clickable="true"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/editTextFecha"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:padding="8dp" />
+        <TextView
+            android:id="@+id/textViewReservarTurno"
+            android:text="Editar turno"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp" />
 
-    <Button
-        android:id="@+id/btnGuardarTurno"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Guardar Cambios"
-        android:layout_marginTop="24dp"
-        app:layout_constraintTop_toBottomOf="@id/editTextHora"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <Spinner
+            android:id="@+id/spinnerProfesional"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/rounded_edittext"
+            android:padding="12dp"
+            android:layout_marginBottom="18dp"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <EditText
+            android:id="@+id/editTextFecha"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="Fecha"
+            android:focusable="false"
+            android:clickable="true"
+            android:background="@drawable/rounded_edittext"
+            android:padding="12dp"
+            android:layout_marginBottom="18dp" />
+
+        <EditText
+            android:id="@+id/editTextHora"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="Hora"
+            android:focusable="false"
+            android:clickable="true"
+            android:background="@drawable/rounded_edittext"
+            android:padding="12dp"
+            android:layout_marginBottom="28dp" />
+
+        <Button
+            android:id="@+id/btnGuardarTurno"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Guardar Cambios"
+            android:backgroundTint="@color/turna_primary"
+            android:textColor="@android:color/white"
+            android:textAllCaps="false"
+            android:layout_marginTop="12dp" />
+
+    </LinearLayout>
+</ScrollView>
