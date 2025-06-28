@@ -32,8 +32,11 @@ public abstract class AppDatabase extends RoomDatabase {
                                     new Thread(() -> {
                                         AppDatabase database = getInstance(context);
                                         TurnoDao turnoDao = database.turnoDao();
+                                        UsuarioDao usuarioDao = database.usuarioDao();
                                         turnoDao.insert(new Turno("Turno 1", "Consulta", "2025-07-01", "09:00", "Dr. Prueba"));
                                         turnoDao.insert(new Turno("Turno 2", "Control", "2025-07-02", "11:00", "Lic. Ejemplo"));
+                                        usuarioDao.insert(new Usuario("prueba@turna.com", "123456"));
+
                                     }).start();
                                 }
                             })
