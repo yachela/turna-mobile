@@ -21,6 +21,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText editTextEmail, editTextPassword;
     private Button btnLogin;
     private UsuarioDao usuarioDao;
+    private Executor executor = Executors.newSingleThreadExecutor();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +44,6 @@ public class LoginActivity extends AppCompatActivity {
                 return;
             }
 
-            Executor executor = Executors.newSingleThreadExecutor();
             executor.execute(() -> {
                 Usuario usuario = usuarioDao.login(email, password);
                 runOnUiThread(() -> {
@@ -51,6 +51,7 @@ public class LoginActivity extends AppCompatActivity {
                         getSharedPreferences("TurnaPrefs", MODE_PRIVATE)
                                 .edit()
                                 .putBoolean("logueado", true)
+                                .putString("email", usuario.getEmail())
                                 .apply();
                         Intent intent = new Intent(LoginActivity.this, MenuPrincipalActivity.class);
                         startActivity(intent);
